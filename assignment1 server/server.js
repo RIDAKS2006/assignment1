@@ -2,7 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const studentdata= require('D:\\vsc\\assignment 1\\assignment1 server\\server.js');
+const Student= require('./student.js');
 
 //server variable
 const server= express();
@@ -13,7 +13,7 @@ server.use(bodyParser.urlencoded({extended: true}));
 
 //mangoDB connection
 mongoose.connect(
-    'mongodb://localhost:27017/',
+    'mongodb://localhost:27017/assignment1',
     {
         useNewUrlParser : true,
         useUnifiedTopology : true
@@ -35,8 +35,9 @@ server.listen('3000',()=>{
 
 //inserting student data
 server.post('/students', async(req,res)=>{
-    try{
-        const student =  new studentdata(req.body);
+    try{ 
+        console.log(req.body);
+        const student =  new Student(req.body);
         await student.save();
         res.status(201).send(student);
     }
@@ -48,7 +49,7 @@ server.post('/students', async(req,res)=>{
 //retrieving data
 server.get('/students', async(req,res)=>{
     try{
-        const student =  await studentdata.find();
+        const student =  await Studenttudent.find();
         res.send(student);
     }
     catch(err){
@@ -59,7 +60,7 @@ server.get('/students', async(req,res)=>{
 //reteieve data with id
 server.get('/students/:id', async(req,res)=>{
     try{
-        const student = await studentdata.findById(req.params.id);
+        const student = await Student.findById(req.params.id);
         res.send(student);
         if(!student){
             res.status(404).send('data not found please recheck');
@@ -73,7 +74,7 @@ server.get('/students/:id', async(req,res)=>{
 //update entry
 server.put('/students/:id', async(req, res)=>{
     try{
-        const studentupdate= await studentdata.findByIdAndUpdate(req.params.id, req.body, {new:true});
+        const studentupdate= await Student.findByIdAndUpdate(req.params.id, req.body, {new:true});
         res.send(studentupdate);
     }
     catch(err){
@@ -84,7 +85,7 @@ server.put('/students/:id', async(req, res)=>{
 //delete data
 server.delete('/products/:id', async(req, res)=>{
     try{
-        const student= await studentdata.findByIdAndDelete(req,params.id);
+        const student= await Student.findByIdAndDelete(req,params.id);
         res.send(student);
     }
     catch(err){
